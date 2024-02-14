@@ -1,0 +1,26 @@
+eslint:
+  image: node
+  tags:
+    - docker
+  stage: test_shop
+  script:
+    - cd onlineshop/client
+    - npm ci
+    - npm run lint
+  rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    changes:
+      - onlineshop/**/*
+      
+testServer:
+  image: mcr.microsoft.com/dotnet/sdk:5.0
+  tags:
+    - docker
+  stage: test_shop
+  script:
+    - cd onlineshop/server/WebApi.Tests
+    - dotnet test
+  rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    changes:
+      - onlineshop/**/*
